@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-
 import css from './ImageGalleryItem.module.css';
+
 function ImageGalleryItem({ tags, webformatURL, largeImageURL, openModal }) {
   return (
     <li className={css.item} onClick={openModal}>

@@ -1,56 +1,45 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { BsXLg } from 'react-icons/bs';
 import css from './Modal.module.css';
+
 const modalRoot = document.querySelector('#modal-root');
 
-class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
+function Modal({ onClose, tags, largeImageURL }) {
+  useEffect(() => {
+    const handleKeyDown = evt => {
+      if (evt.code === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
-  }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
-  handleClickOverlay = evt => {
-    if (evt.target === evt.currentTarget) {
-      this.props.onClose();
+  const handleClickOverlay = evt => {
+    if (evt.currentTarget === evt.target) {
+      onClose();
     }
   };
 
-  handleKeyDown = evt => {
-    if (evt.code === 'Escape') {
-      this.props.onClose();
-    }
-  };
-
-  render() {
-    const { onClose, currentImageUrl, currentImageDescription } = this.props;
-
-    return createPortal(
-      <div className={css.overlay} onClick={this.handleClickOverlay}>
-        <div className={css.modal}>
-          <div className={css.wrapper}>
-            <button className={css.button} type="button" onClick={onClose}>
-              <BsXLg className={css.icon} />
-            </button>
-          </div>
-          <img
-            src={currentImageUrl}
-            alt={currentImageDescription}
-            loading="lazy"
-          />
+  return createPortal(
+    <div className={css.overlay} onClick={handleClickOverlay}>
+      <div className={css.modal}>
+        <div className={css.wrapper}>
+          <button className={css.button} type="button" onClick={onClose}>
+            <BsXLg className={css.icon} />
+          </button>
         </div>
-      </div>,
-      modalRoot
-    );
-  }
+        <img src={largeImageURL} alt={tags} loading="lazy" />
+      </div>
+    </div>,
+    modalRoot
+  );
 }
+
 Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
-  currentImageUrl: PropTypes.string.isRequired,
-  currentImageDescription: PropTypes.string,
 };
 export default Modal;
