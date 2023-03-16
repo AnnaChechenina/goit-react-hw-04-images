@@ -15,7 +15,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [images, setImages] = useState([]);
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
   const [currentImageUrl, setCurrentImageUrl] = useState(null);
   const [currentImageDescription, setCurrentImageDescription] = useState(null);
 
@@ -35,7 +35,7 @@ const App = () => {
         setImages(prevState => [...prevState, ...images]);
         setTotalImages(totalImages);
       } catch (error) {
-        toast.error(setError.message);
+        toast.error(Error.message);
       } finally {
         setIsLoading(false);
       }
@@ -58,7 +58,11 @@ const App = () => {
     setShowModal(prevState => !prevState);
   };
 
-  const openModal = () => setShowModal(true);
+  const openModal = () => {
+    setShowModal(true);
+    currentImageUrl(setCurrentImageUrl);
+    currentImageDescription(setCurrentImageDescription);
+  };
 
   return (
     <>
@@ -75,8 +79,8 @@ const App = () => {
       {showModal && (
         <Modal
           onClose={toggleModal}
-          // currentImageUrl={largeImageURL}
-          // currentImageDescription={tags}
+          currentImageUrl={setCurrentImageUrl}
+          currentImageDescription={setCurrentImageDescription}
         />
       )}
 
