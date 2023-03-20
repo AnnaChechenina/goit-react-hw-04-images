@@ -26,6 +26,7 @@ const App = () => {
 
     async function addImages() {
       try {
+        setIsLoading(true);
         const { images, totalImages } = await fetchImages(query, page);
 
         if (!images.length) {
